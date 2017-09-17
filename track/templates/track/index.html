@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<head>
+  <title>Goal Trackerz</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+
+
+    {% load staticfiles %}
+
+
+ <link rel="stylesheet" href="{% static 'sadreact.css'%}">
+
+</head>
+<body onLoad="$('#my-modal').modal('show');">
+<!-- Modal -->
+<div id="my-modalz" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div id="content">
+                <div class="modal-header">
+                   <h4 class="modal-title" align="center" id="modal-head">  &nbsp;<span class="glyphicon glyphicon-search"></span>&nbsp;</h4>
+                   <br>
+                    <div class="well" style="background-color:beige">
+                        <h6 id="modal-desc"></h6>
+                   </div>
+                </div>
+                <form action="" method="POST">
+                    <div class="modal-body">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div id="custom-search-input">
+                                        <div class="input-group col-md-12">
+
+                                            <body ng-app="myApp" ng-controller="todoCtrl">
+
+                                                <h2>Add Subtasks</h2>
+                                                <div>
+                                                    {% csrf_token %}
+                                                    <div class="input-group">
+                                                        <div class="col-lg-12">
+                                                          <span class="input-group-btn">
+                                                            <input id="todoInput" name="deaccession number" style="width: 50%" type="text" ng-model="todoInput" placeholder="Add New" class="form-control " /><br>
+                                                            <button class="btn btn-default" type="button"  ng-click="todoAdd()"><span class="glyphicon glyphicon-plus"></span></button>
+                                                          </span>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <input type="hidden" name="gNamePost" id="gNamePost" value="">
+                                                <input type="hidden" name="gDescPost" id="gDescPost" value="">
+                                                <input type="hidden" name="gDatePost" id="gDatePost" value="">
+
+
+
+                                                <br>
+                                                <div ng-repeat="x in todoList" ng-if="$index > 0">
+                                                    <input type="text" ng-model="x.todoText" name="tite" class="form-control" readonly>
+                                                </div>
+
+                                              <!--  value="x.todoText" class="form-control" disabled/ <button class = "btn btn-warning" type="button" ng-click="remove()">Remove</button> -->
+
+                                            </body>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary"  name="submit" >Add Task</button>
+
+            </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+</body>
+<body ng-app="myApp" ng-controller="todoCtrl">
+
+<div class="container-fluid">
+  <div class="row content">
+
+
+    <div class="col-sm-3 sidenav hidden-xs" >
+        <h2>
+            <h3  style="display: inline-block;text-align: center ;color: dodgerblue">MARK's <b>GOAL TRACKER</b></h3>
+        </h2>
+        <hr style="color: dodgerblue">
+        <b style="color: lightgreen; display: inline; font-size: 25px">ADD NEW GOAL </b>
+            <p>GOAL: <input type="text" name="goal" id="goal1" class="form-control"></p>
+            <p>DESCRIPTION: <textarea  name="desc" id="desc1" class="form-control"></textarea></p>
+            <p>DUE DATE: <input class="form-control" id="date1"  style="display: inline;" name="date" placeholder="MM/DD/YYYY" type="text"/></p>
+
+        <button type = "button" id="asd" name="singlebutton" class="btn btn-warning btn-lg"  onClick="postModal()">Add Goal</button>
+        <button type="button" id="submitBtn" style="display:none;"  data-toggle="modal" data-target="#my-modalz" data-validate="contact-form">Hidden Button</button>
+
+    </div>
+    <br>
+
+    <div class="col-sm-9">
+      <div class="well" style="overflow-y: scroll; max-height: 400px">
+          <div class="row">
+              <div class="col-md-6">
+
+                  <h1 style="color: dodgerblue; padding: inherit;"><b>GOALS FOR THE BREAK</b></h1>
+
+              </div>
+              <div class="col-md-6">
+                  <div class="input-group">
+                      <span class="input-group-addon" id="basic-addon1" style="background: none"><span class="glyphicon glyphicon-search"></span></span>
+                      <input type="text" ng-model="query" class="form-control" placeholder="search for zucced" style="background: #2e499b; color: #79aec8" >
+                  </div>
+              </div>
+          </div>
+
+          <hr>
+                 <div ng-repeat="x in goals | filter:query" >
+                    <div class="panel-group">
+                        <!-- ng-if="$index > 0" -->
+
+                          <div class="panel panel-default" style="border: none;">
+                            <div class="panel-heading" style="background-color: #2e499b; border: none">
+                              <h4 class="panel-title">
+
+                                  {% verbatim %}
+                                  <div class="row">
+                                        <div class="col-md-6">
+                                            <a data-toggle="collapse" style="font-size:25px; color: powderblue; display: inline" ng-model="x.goalName" href="#collapse-{{ x.id }}">{{ x.goalName }}</a>
+
+                                            <small><p><b>Description</b>:          {{ x.desc }}</p></small>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="progress">
+                                              <div class="progress-bar" role="progressbar" style="width: {{ x.status }}%; align-content: center;display: inline" aria-valuenow="{{ x.status }}" aria-valuemin="0" aria-valuemax="100">{{ x.status }}%</div>
+                                            </div>
+                                            <center><p ng-if=" x.status <=0">{{ x.status }}% PROGRESS COMPLETED</p></center>
+                                        </div>
+                                  </div>
+                                  {% endverbatim %}
+                              </h4>
+                            </div>
+                                  {% verbatim %}
+                            <div id="collapse-{{ x.id }}" class="panel-collapse collapse">
+                                  {% endverbatim %}
+
+                              <div class="panel-body">
+                                  <form action="" method="post">
+                                      {%  verbatim %}
+                                        <div ng-repeat="y in x.subtask">
+                                            <input type="checkbox" name="subTsk" id="EUT-{{ y.task }}" ng-model="y.done"> <span ng-bind="y.task" id="EUT{{ y.task }}"></span>
+                                        </div>
+                                            <hr>
+                                            <b>Accomplished Task</b>
+                                        <div ng-repeat="z in x.donetask" id="donetsk">
+                                            <input type="checkbox" name="a" disabled="disabled" ng-model="z.done"> <span ng-bind="z.task"></span>
+                                        </div>
+                                        <button type="button" ng-click="complete()" class="btn btn-info btn-circle"><i class="glyphicon glyphicon-ok"></i></button>
+                                      {% endverbatim %}
+
+                                  </form>
+                              </div>
+                                {% verbatim %}
+                                    <div class="panel-footer"><small>{{ x.id }} created at {{ x.dateCreateG }} | due at <b>{{ x.dueDateG }}</b></small></div>
+                                {% endverbatim %}
+                            </div>
+                          </div>
+
+
+                    </div>
+                 </div>
+
+
+              {% if goals %}
+                  {% for a in goals reversed %}
+                    <!--
+                      <div class="panel-group">
+                          <div class="panel panel-default">
+                            <div class="panel-heading">
+                              <h4 class="panel-title">
+                                <a data-toggle="collapse" href="#collapse-{{ a.id }}">{{ a.goal_name }}</a>
+                              </h4>
+                            </div>
+                            <div id="collapse-{{ a.id }}" class="panel-collapse collapse">
+                              <div class="panel-body">{{ a.desc }}</div>
+                                <div class="panel-footer"><small>{{ a.id }} created at {{ a.date_createG }} | due at <b>{{ a.dueDateG }}</b></small></div>
+                            </div>
+                          </div>
+                        </div>
+                     -->
+                  {% endfor %}
+              {% endif %}
+
+      </div>
+      <div class="row">
+              <div class="col-sm-6">
+                <div class="well">
+                  <h4>TASK MODULES</h4>
+                  <div>
+                    <p>☐ Add Goal [Name/Description]</p>
+                    <p>☐ Add Subtasks [Name/Description]</p>
+                    <p>☐ Complete Tasks</p>
+                    <p>☐ Remove Goals</p>
+                    <p>☐ Remove Tasks</p>
+                    <p>☐ Status Bars </p>
+                    <p>☐ Migrate DB </p>
+                    <p>* Goal is only complete when all tasks done *</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="well">
+                  <h4>OTHER PET PROJECTS</h4>
+                    <a href="{% url 'firebase' %}" class="text-primary"> F I R E B A S E <span
+                        class="glyphicon glyphicon-grain"></span></a>
+
+                    <img src="{% static 'firebase.png' %}" class="img" style="display: inline-block" height="80px" width="120px" alt="" />
+                  <p></p>
+                </div>
+              </div>
+      </div>
+      <div class="row">
+              <div class="col-sm-4">
+                <div class="well">
+                  <p>Text</p>
+                  <p>Text</p>
+                  <p>Text</p>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="well">
+                  <p>Text</p>
+                  <p>Text</p>
+                  <p>Text</p>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="well">
+                  <p>Text</p>
+                  <p>Text</p>
+                  <p>Text</p>
+                </div>
+              </div>
+      </div>
+      <div class="row">
+            <div class="col-sm-8">
+              <div class="well">
+                <p>Text</p>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="well">
+                <p>Text</p>
+              </div>
+            </div>
+          </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
+<script>
+
+    $(document).ready(function (){
+         $('#my-modal').modal('show');
+
+     });
+
+    $(document).ready(function(){
+         var date_input=$('input[name="date"]'); //our date input has the name "date"
+         var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+         var options={
+             format: 'dd/mm/yyyy',
+             container: container,
+             todayHighlight: true,
+             autoclose: true,
+         };
+         date_input.datepicker(options);
+     });
+
+    function postModal(){
+        var nm = $('#goal1').val();
+        var ds = $('#desc1').val();
+        var dt = $('#date1').val();
+
+        var a = $('#goal1').val() + " [ DUE ON : " + $('#date1').val()+" ]";
+        var b = $('#desc1').val();
+
+        $('#gNamePost').val(nm);
+        $('#gDescPost').val(ds);
+        $('#gDatePost').val(dt);
+
+        $('#modal-head').html(a);
+        $('#modal-desc').html(b);
+
+        $('#submitBtn').click();
+    }
+    var app = angular.module('myApp', []);
+
+    app.controller('todoCtrl', function($scope) {
+    $scope.todoList = [{}];
+
+    $scope.goals = [
+            {% for a in goals reversed %}
+                { goalName:'{{ a.goal_name }}',status: '{{ a.get_Status }}',id:'{{ a.id }}', desc:'{{ a.desc }}',dateCreateG:'{{ a.date_createG }}',dueDateG:'{{ a.dueDateG }}',
+                    subtask:[
+                        {% for sub in subs %}
+                            {% if a.goal_name == sub.goal_name.goal_name %}
+                                {% if sub.doneDateS == NULL %}
+                                    { task: '{{ sub.task_name }}', done: false },
+                                {% endif %}
+
+                            {% endif  %}
+                        {% endfor %}
+                ], donetask:[
+                    {% for sub in subs %}
+                        {% if a.goal_name == sub.goal_name.goal_name %}
+                                {% if sub.doneDateS != NULL %}
+                                    { task: '{{ sub.task_name }}', done: true },
+                                {% endif %}
+                            {% endif  %}
+                    {% endfor %}
+                ]},
+            {% endfor %}
+    ];
+
+
+    $scope.todoAdd = function() {
+        $scope.todoList.push({todoText:$scope.todoInput});
+        $scope.todoInput = "";
+    };
+
+    $scope.complete = function() {
+        const csrfToken = "{{ csrf_token }}";
+
+        $.ajaxSetup({
+            headers: {
+                'CSRFToken': csrfToken
+            }
+        });
+
+
+        event.preventDefault();
+        var oldList = $scope.goals;
+        angular.forEach($scope.goals, function(x) {
+
+            angular.forEach(x.subtask, function (y) {
+
+                if (y.done) {
+                    console.log("i saw one sir. ")
+                    $.ajax({
+                    type : "POST",
+                    url : 'ajax/completeTask/',
+                    data:{
+                        task_name: y.task,
+                        csrfmiddlewaretoken: csrfToken
+                    }
+                    }).then(function success(response) {
+                        console.log(response.awch);
+                        console.log("inside daddy");
+
+                        $('#EUT'+y.task).remove();
+                        $('#EUT-'+y.task).remove();
+
+                        $('#donetsk').append('<br><input type="checkbox" name="a" disabled="disabled" checked="true"> <span>'+y.task+'</span>');
+
+                    });
+                }
+            });
+
+        });
+
+
+
+
+    };
+});
+
+
+
+
+</script>

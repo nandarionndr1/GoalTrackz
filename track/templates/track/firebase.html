@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<head>
+  <title>Goal Trackerz</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+
+
+    {% load staticfiles %}
+
+
+ <link rel="stylesheet" href="{% static 'sadreact.css'%}">
+
+</head>
+
+<body ng-app="myApp" ng-controller="todoCtrl">
+
+<div class="container-fluid">
+  <div class="row content">
+
+
+    <div class="col-sm-3 sidenav hidden-xs" >
+        <h2>
+            <h3  style="display: inline-block;text-align: center ;color: dodgerblue">FIREBASE LOGGING DOGING </h3>
+        </h2>
+        <img src="{% static 'firebase.png' %}" class="img" style="display: inline-block" height="80px" width="120px" alt="" />
+    </div>
+    <br>
+
+    <div class="col-sm-9">
+      <div class="well" style="background-color: darkgray">
+          <form method="post" action="" role="login">
+              <h1 style="color: dodgerblue; padding: inherit;"><b>FIREBASE.IO FOR THE BREAK</b></h1>
+              <hr>
+             {% csrf_token %}
+             {{ form.as_p }}
+              <button type="submit" name="go" class="btn btn-lg btn-block btn-success">Create Account</button>
+          </form>
+      </div>
+      <div class="row">
+              <div class="col-sm-6">
+                <div class="well">
+                  <h4>TASK MODULES</h4>
+                  <div>
+                      {% for dick in digbick %}
+                          <p>{{ dick }}</p>
+                          <br>
+                            {% for bick in dick %}
+                            <br>
+                            <p>{{ bick }}</p>
+                            <br>
+                                {% for ab in bick %}
+                                <br>
+                                <p>{{ ab }}</p>
+                                    <br>
+                                {% endfor %}
+                            {% endfor %}
+                      {% endfor %}
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="well">
+                  <h4>OTHER PET PROJECTS</h4>
+                  <p></p>
+                </div>
+              </div>
+      </div>
+      <div class="row">
+              <div class="col-sm-4">
+                <div class="well">
+                  <p>Text</p>
+                  <p>Text</p>
+                  <p>Text</p>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="well">
+                  <p>Text</p>
+                  <p>Text</p>
+                  <p>Text</p>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="well">
+                  <p>Text</p>
+                  <p>Text</p>
+                  <p>Text</p>
+                </div>
+              </div>
+      </div>
+      <div class="row">
+            <div class="col-sm-8">
+              <div class="well">
+                <p>Text</p>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="well">
+                <p>Text</p>
+              </div>
+            </div>
+          </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
+<script>
+
+    $(document).ready(function (){
+         $('#my-modal').modal('show');
+
+     });
+
+    $(document).ready(function(){
+         var date_input=$('input[name="date"]'); //our date input has the name "date"
+         var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+         var options={
+             format: 'dd/mm/yyyy',
+             container: container,
+             todayHighlight: true,
+             autoclose: true,
+         };
+         date_input.datepicker(options);
+     });
+
+    function postModal(){
+        var nm = $('#goal1').val();
+        var ds = $('#desc1').val();
+        var dt = $('#date1').val();
+
+        var a = $('#goal1').val() + " [ DUE ON : " + $('#date1').val()+" ]";
+        var b = $('#desc1').val();
+
+        $('#gNamePost').val(nm);
+        $('#gDescPost').val(ds);
+        $('#gDatePost').val(dt);
+
+        $('#modal-head').html(a);
+        $('#modal-desc').html(b);
+
+        $('#submitBtn').click();
+    }
+    var app = angular.module('myApp', []);
+
+    app.controller('todoCtrl', function($scope) {
+    $scope.todoList = [{}];
+
+    $scope.goals = [
+            {% for a in goals reversed %}
+                { goalName:'{{ a.goal_name }}',status: '{{ a.get_Status }}',id:'{{ a.id }}', desc:'{{ a.desc }}',dateCreateG:'{{ a.date_createG }}',dueDateG:'{{ a.dueDateG }}',
+                    subtask:[
+                        {% for sub in subs %}
+                            {% if a.goal_name == sub.goal_name.goal_name %}
+                                {% if sub.doneDateS == NULL %}
+                                    { task: '{{ sub.task_name }}', done: false },
+                                {% endif %}
+
+                            {% endif  %}
+                        {% endfor %}
+                ], donetask:[
+                    {% for sub in subs %}
+                        {% if a.goal_name == sub.goal_name.goal_name %}
+                                {% if sub.doneDateS != NULL %}
+                                    { task: '{{ sub.task_name }}', done: true },
+                                {% endif %}
+                            {% endif  %}
+                    {% endfor %}
+                ]},
+            {% endfor %}
+    ];
+
+
+    $scope.todoAdd = function() {
+        $scope.todoList.push({todoText:$scope.todoInput});
+        $scope.todoInput = "";
+    };
+
+    $scope.complete = function() {
+        const csrfToken = "{{ csrf_token }}";
+
+        $.ajaxSetup({
+            headers: {
+                'CSRFToken': csrfToken
+            }
+        });
+
+
+        event.preventDefault();
+        var oldList = $scope.goals;
+        angular.forEach($scope.goals, function(x) {
+
+            angular.forEach(x.subtask, function (y) {
+
+                if (y.done) {
+                    console.log("i saw one sir. ")
+                    $.ajax({
+                    type : "POST",
+                    url : 'ajax/completeTask/',
+                    data:{
+                        task_name: y.task,
+                        csrfmiddlewaretoken: csrfToken
+                    }
+                    }).then(function success(response) {
+                        console.log(response.awch);
+                        console.log("inside daddy");
+
+                        $('#EUT'+y.task).remove();
+                        $('#EUT-'+y.task).remove();
+
+                        $('#donetsk').append('<br><input type="checkbox" name="a" disabled="disabled" checked="true"> <span>'+y.task+'</span>');
+
+                    });
+                }
+            });
+
+        });
+
+
+
+
+    };
+});
+
+
+
+
+</script>
